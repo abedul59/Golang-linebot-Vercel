@@ -13,10 +13,11 @@
 package handler
 
 import (
-
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
@@ -25,21 +26,12 @@ var bot *linebot.Client
 func Main() {
 	
 	var err error
-	bot, err := linebot.New(
-		os.Getenv("ChannelSecrect"),
-		os.Getenv("ChannelAccessToken"),
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Setup HTTP Server for receiving requests from LINE platform
-	http.HandleFunc("/callback", CallbackHandler)
-	// This is just sample code.
-	// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
-	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
-		log.Fatal(err)
-	}
+	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
+	log.Println("Bot:", bot, " err:", err)
+	http.HandleFunc("/callback", callbackHandler)
+	port := os.Getenv("PORT")
+	addr := fmt.Sprintf(":%s", port)
+	http.ListenAndServe(addr, nil)
 }
 
 func CallbackHandler(w http.ResponseWriter, req *http.Request) {
