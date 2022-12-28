@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package main
+package handler
 
 import (
 	"fmt"
@@ -23,7 +23,7 @@ import (
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
-func main() {
+func Main() {
 	bot, err := linebot.New(
 		os.Getenv("ChannelSecret"),
 		os.Getenv("ChannelAccessToken"),
