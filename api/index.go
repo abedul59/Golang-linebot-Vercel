@@ -13,12 +13,10 @@
 package handler
 
 import (
-	"fmt"
+
 	"log"
 	"net/http"
 	"os"
-	"strconv"
-
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
