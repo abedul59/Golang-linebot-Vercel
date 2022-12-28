@@ -10,7 +10,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package handler
+package main
 
 import (
 	"fmt"
@@ -24,7 +24,7 @@ import (
 
 var bot *linebot.Client
 
-func Handler(w http.ResponseWriter, r *http.Request) {
+func Main(w http.ResponseWriter, r *http.Request) {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
