@@ -23,6 +23,8 @@ import (
 var bot *linebot.Client
 
 func Main() {
+	
+	var err error
 	bot, err := linebot.New(
 		os.Getenv("ChannelSecrect"),
 		os.Getenv("ChannelAccessToken"),
