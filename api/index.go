@@ -28,7 +28,7 @@ func main(w http.ResponseWriter, r *http.Request) {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
-	http.HandleFunc("/callback", callbackHandler)
+	http.HandleFunc("/callback", CallbackHandler)
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
