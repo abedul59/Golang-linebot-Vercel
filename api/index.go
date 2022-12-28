@@ -17,7 +17,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
@@ -28,7 +27,7 @@ func Main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
-	http.HandleFunc("/callback", callbackHandler)
+	http.HandleFunc("/callback", CallbackHandler)
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
