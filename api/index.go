@@ -9,6 +9,7 @@ import (
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
+
 func Main() {
 	bot, err := linebot.New(
 		os.Getenv("ChannelSecret"),
@@ -19,8 +20,15 @@ func Main() {
 	}
 
 	// Setup HTTP Server for receiving requests from LINE platform
-	http.HandleFunc("/callback", func(w http.ResponseWriter, req *http.Request) {
-		events, err := bot.ParseRequest(req)
+	http.HandleFunc("/callback", CallbackHandler) 
+	port := os.Getenv("PORT")
+	addr := fmt.Sprintf(":%s", port)
+	http.ListenAndServe(addr, nil)
+	
+	
+func CallbackHandler(w http.ResponseWriter, r *http.Request) {
+		events, err := bot.ParseRequest(r)
+	
 		if err != nil {
 			if err == linebot.ErrInvalidSignature {
 				w.WriteHeader(400)
@@ -29,26 +37,35 @@ func Main() {
 			}
 			return
 		}
+	
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
+				// Handle only on text message
 				case *linebot.TextMessage:
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
+					// GetMessageQuota: Get how many remain free tier push message quota you still have this month. (maximum 500)
+					quota, err := bot.GetMessageQuota().Do()
+					if err != nil {
+						log.Println("Quota err:", err)
+					}
+					// message.ID: Msg unique ID
+					// message.Text: Msg text
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("msg ID:"+message.ID+":"+"Get:"+message.Text+" , \n OK! remain message:"+strconv.FormatInt(quota.Value, 10))).Do(); err != nil {
 						log.Print(err)
 					}
+	
+				// Handle only on Sticker message
 				case *linebot.StickerMessage:
-					replyMessage := fmt.Sprintf(
-						"sticker id is %s, stickerResourceType is %s", message.StickerID, message.StickerResourceType)
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMessage)).Do(); err != nil {
+					var kw string
+					for _, k := range message.Keywords {
+						kw = kw + "," + k
+					}
+	
+					outStickerResult := fmt.Sprintf("收到貼圖訊息: %s, pkg: %s kw: %s  text: %s", message.StickerID, message.PackageID, kw, message.Text)
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(outStickerResult)).Do(); err != nil {
 						log.Print(err)
 					}
 				}
 			}
 		}
-	})
-	// This is just sample code.
-	// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
-	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
-		log.Fatal(err)
 	}
-}
