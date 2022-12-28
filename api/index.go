@@ -24,7 +24,7 @@ import (
 
 var bot *linebot.Client
 
-func Main(w http.ResponseWriter, r *http.Request) {
+func Main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
