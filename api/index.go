@@ -18,8 +18,8 @@ func Handler(w http.ResponseWriter, req *http.Request) {
 		}
 	
 		// Setup HTTP Server for receiving requests from LINE platform
-		http.HandleFunc("/callback", func(w http.ResponseWriter, req *http.Request) {
-			events, err := bot.ParseRequest(req)
+		
+		events, err := bot.ParseRequest(req)
 			if err != nil {
 				if err == linebot.ErrInvalidSignature {
 					w.WriteHeader(400)
@@ -44,7 +44,7 @@ func Handler(w http.ResponseWriter, req *http.Request) {
 					}
 				}
 			}
-		})
+		
 		// This is just sample code.
 		// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
 		if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
