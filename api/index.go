@@ -13,7 +13,13 @@ var bot *linebot.Client
 
 
 
-func callbackHandler(w http.ResponseWriter, req *http.Request) {
+func CallbackHandler(w http.ResponseWriter, req *http.Request) {
+
+	var err error
+	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
+	log.Println("Bot:", bot, " err:", err)
+
+	http.HandleFunc("/callback", 	
 		events, err := bot.ParseRequest(req)
 		if err != nil {
 			if err == linebot.ErrInvalidSignature {
@@ -32,21 +38,16 @@ func callbackHandler(w http.ResponseWriter, req *http.Request) {
 					}
 				}
 			}
-		}
+		})
+	port := os.Getenv("PORT")
+	addr := fmt.Sprintf(":%s", port)
+	http.ListenAndServe(addr, nil)	
+	
+
 	}
 
 
 
-func Handler() {
-	
-	var err error
-	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
-	log.Println("Bot:", bot, " err:", err)
 
-	http.HandleFunc("/callback", callbackHandler)
-	port := os.Getenv("PORT")
-	addr := fmt.Sprintf(":%s", port)
-	http.ListenAndServe(addr, nil)
-}
 
 
