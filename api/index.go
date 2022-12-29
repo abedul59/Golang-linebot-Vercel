@@ -11,16 +11,6 @@ import (
 var bot *linebot.Client
 
 
-func Test(w http.ResponseWriter, r *http.Request) {
-	str := `<!DOCTYPE html>
-<html>
-<head><title>首頁</title></head>
-<body><h1>首頁</h1><p>我的第一個首頁</p></body>
-</html>
-`
-	w.Write([]byte(str))
-}
-
 
 
 func CallbackHandler(w http.ResponseWriter, req *http.Request) {
@@ -52,7 +42,7 @@ func handler() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
-        http.HandleFunc("/", Test)
+        http.HandleFunc("/", CallbackHandler)
 	http.HandleFunc("/callback", CallbackHandler)
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
