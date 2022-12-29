@@ -1,5 +1,5 @@
 package handler
-	
+
 import (
 	"fmt"
 	"log"
@@ -8,7 +8,7 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 	)
 	
-func Handler() {
+func Handler(w http.ResponseWriter, req *http.Request) {
 		bot, err := linebot.New(
 			os.Getenv("ChannelSecret"),
 			os.Getenv("ChannelAccessToken"),
