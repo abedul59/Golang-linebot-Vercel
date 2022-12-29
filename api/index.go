@@ -37,7 +37,7 @@ func callbackHandler(w http.ResponseWriter, req *http.Request) {
 
 
 
-func Handler(w http.ResponseWriter, req *http.Request) {
+func Handler() {
 	
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
