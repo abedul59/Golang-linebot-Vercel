@@ -10,16 +10,7 @@ import (
 
 var bot *linebot.Client
 
-func handler() {
-	
-	var err error
-	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
-	log.Println("Bot:", bot, " err:", err)
-	http.HandleFunc("/callback", CallbackHandler)
-	port := os.Getenv("PORT")
-	addr := fmt.Sprintf(":%s", port)
-	http.ListenAndServe(addr, nil)
-}
+
 
 func CallbackHandler(w http.ResponseWriter, req *http.Request) {
 		events, err := bot.ParseRequest(req)
@@ -42,3 +33,18 @@ func CallbackHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 	}
+
+
+
+func handler() {
+	
+	var err error
+	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
+	log.Println("Bot:", bot, " err:", err)
+	http.HandleFunc("/callback", CallbackHandler)
+	port := os.Getenv("PORT")
+	addr := fmt.Sprintf(":%s", port)
+	http.ListenAndServe(addr, nil)
+}
+
+
