@@ -1,15 +1,14 @@
 package handler
 	
-	import (
-		"fmt"
-		"log"
-		"net/http"
-		"os"
-	
-		"github.com/line/line-bot-sdk-go/linebot"
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"github.com/line/line-bot-sdk-go/linebot"
 	)
 	
-	func Main() {
+func Handler() {
 		bot, err := linebot.New(
 			os.Getenv("ChannelSecret"),
 			os.Getenv("ChannelAccessToken"),
