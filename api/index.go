@@ -37,12 +37,12 @@ func callbackHandler(w http.ResponseWriter, req *http.Request) {
 
 
 
-func Handler() {
+func Handler(w http.ResponseWriter, req *http.Request) {
 	
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
-        http.HandleFunc("/", callbackHandler)
+
 	http.HandleFunc("/callback", callbackHandler)
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
