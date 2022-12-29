@@ -10,7 +10,7 @@ import (
 
 var bot *linebot.Client
 
-func main() {
+func handler() {
 	
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
